@@ -3,49 +3,28 @@ import shutil
 import logging
 from termcolor import colored
 
+import os
+import shutil
+import json
+import logging
+from termcolor import colored
+
+# Load Extension-Category Mapping from JSON
+def load_extension_mapping(json_path):
+    with open(json_path, 'r') as f:
+        return json.load(f)
+
+# Configure Logging
+def configure_logging(log_file_path):
+    logging.basicConfig(filename=log_file_path, level=logging.INFO)
+
 class FileOrganizer:
-    def __init__(self, directory):
+    def __init__(self, directory, disable_prompt=False):
         self.directory = directory
-        self.category_to_extensions = {
-            'Pictures': ['jpeg', 'png', 'jpg', 'gif', 'bmp', 'tiff', 'ico', 'jfif', 'webp', 'heif', 'indd', 'ai', 'eps'],
-            'Audio': ['mp3', 'wav', 'aiff', 'flac', 'aac', 'ogg', 'wma', 'm4a', 'amr'],
-            'Video': ['mp4', 'mkv', 'flv', 'avi', 'mov', 'wmv', 'm4v', 'mpg', 'mpeg', '3gp'],
-            'Documents': ['doc', 'docx', 'pdf', 'odt', 'txt', 'rtf', 'tex', 'wpd', 'ods'],
-            'Spreadsheets': ['xls', 'xlsx', 'csv', 'ods'],
-            'Presentations': ['ppt', 'pptx', 'odp'],
-            'Database': ['db', 'accdb', 'mdb', 'sql'],
-            'Code': ['html', 'htm', 'css', 'scss', 'js', 'jsx', 'ts', 'tsx', 'php', 'py', 'java', 'c', 'cpp', 'go', 'rb', 'cs', 'sh', 'bat', 'pl', 'r'],
-            'Archives': ['zip', 'rar', 'tar', 'gz', '7z', 'arj', 'deb', 'pkg', 'rpm', 'z', 'lz'],
-            'DiskImages': ['iso', 'toast', 'vcd'],
-            'Fonts': ['fnt', 'fon', 'otf', 'ttf'],
-            'System': ['bak', 'cab', 'cfg', 'cpl', 'cur', 'dll', 'dmp', 'drv', 'icns', 'ini', 'lnk', 'msi', 'sys', 'tmp'],
-            'GameFiles': ['b', 'dem', 'gam', 'nes', 'rom', 'sav'],
-            'CAD': ['dwg', 'dxf'],
-            'GIS': ['gpx', 'kml', 'kmz'],
-            'Web': ['asp', 'aspx', 'cer', 'cfm', 'csr', 'dcr', 'htm', 'jsp', 'rss', 'xhtml'],
-            'Plugin': ['crx', 'plugin'],
-            'Scripts': ['js', 'php', 'pl', 'py', 'cgi', 'asp'],
-            'Settings': ['cfg', 'ini', 'prf'],
-            'Encoded': ['hqx', 'mim', 'uue'],
-            'Compressed': ['z', 'gzip'],
-            'Logs': ['log', 'dat'],
-            '3DFiles': ['3dm', '3ds', 'max', 'obj'],
-            'RasterImages': ['raster', 'pxr', 'raw'],
-            'VectorFiles': ['svg', 'ai', 'eps'],
-            'EBooks': ['epub', 'mobi', 'azw', 'lit', 'pdb'],
-            'Email': ['eml', 'msg', 'oft', 'ost', 'pst', 'vcf'],
-            'Executables': ['apk', 'bat', 'bin', 'cgi', 'com', 'exe', 'jar', 'msi', 'pl', 'sh', 'wsf'],
-            'Crypto': ['cer', 'crt', 'der', 'pfx', 'pem', 'p12', 'p7b', 'p7r'],
-            'Virtual': ['vmdk', 'ova', 'ovf'],
-            'Configuration': ['cfg', 'conf', 'ini', 'reg'],
-            'Scientific': ['cdf', 'dcm', 'fcs', 'fits', 'hdf', 'nc'],
-            'Text': ['txt', 'log', 'md', 'nfo', 'conf'],
-            'Subtitles': ['srt', 'sub', 'sbv'],
-            'Torrents': ['torrent'],
-            'Calendar': ['ics']
-        }
+        self.category_to_extensions = load_extension_mapping('extension_mapping.json')
+        self.disable_prompt = disable_prompt
         self.log_file_path = os.path.expanduser("~/.cache/organizer/organizer_log.txt")
-        logging.basicConfig(filename=self.log_file_path, level=logging.INFO)
+        configure_logging(self.log_file_path)
         
     def _categorize_files(self):
         files = [f for f in os.listdir(self.directory) if os.path.isfile(os.path.join(self.directory, f)) and not f.startswith('.')]
