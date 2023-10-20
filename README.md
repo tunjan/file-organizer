@@ -1,6 +1,6 @@
 # File Organizer
 
-File Organizer is a Python script that helps you organize files in a directory into categorized folders based on their file extensions. It also allows you to rename files based on custom rules or patterns and logs all file movements.
+File Organizer is a Python script that helps you organize files in a directory into categorized folders based on their file extensions. It also logs all file movements.
 
 ## Features
 
