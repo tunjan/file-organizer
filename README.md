@@ -35,12 +35,6 @@ File Organizer is a Python script that helps you organize files in a directory i
 
 - For unmapped file extensions, you can interactively specify the category.
 
-### Renaming
-
-- You can define custom renaming rules using placeholders such as `{original}`, `{date}`, `{category}`, and `{custom}`.
-
-- The script will apply these rules to rename files during the organization process.
-
 ### Logging
 
 - All file movements are logged in a log file located at `~/.cache/organizer/organizer_log.txt`.
