@@ -3,12 +3,6 @@ import shutil
 import logging
 from termcolor import colored
 
-import os
-import shutil
-import json
-import logging
-from termcolor import colored
-
 # Load Extension-Category Mapping from JSON
 def load_extension_mapping(json_path):
     with open(json_path, 'r') as f:
